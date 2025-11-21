@@ -32,6 +32,9 @@ def normalizacja(dane):
         wynik[k] = [(x - minimum) / (maksimum - minimum) for x in dane[k]]
     return wynik
 
+def denomalizacja(dane):
+    return
+
 #funkcja obliczająca WCSS
 def oblicz_WCSS(klastry, centroidy):
     x = len(centroidy)
