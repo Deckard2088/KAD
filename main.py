@@ -35,10 +35,21 @@ def main():
 
     print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k")
     for i in range(2, 11, 1):
-        '''
+        #powtarzamy sobie algorytm kilka razy żeby uzyskać jak najmniejsze WCSS
         klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, i)
         wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
-        print(f"DLA k={i}: \n-liczba iteracji: {iteracje}; \n-WCSS: {wcss:.4f};\n")'''
+        minWcss = wcss
+        finalIteracje = iteracje
+        for j in range(10):
+            klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, i)
+            wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
+            if minWcss > wcss:
+                minWcss = wcss
+                finalIteracje = iteracje
+
+        print(f"DLA k={i}: \n-liczba iteracji: {finalIteracje}; \n-WCSS: {minWcss:.4f};\n")
+
+        '''
         kmeans = KMeans(n_clusters=i, random_state=0)
         kmeans.fit(dane_znormalizowane)
 
@@ -51,9 +62,7 @@ def main():
 
         wcss_sklearn = algorytmy.oblicz_WCSS(klasy_sklearn, centroidy_sklearn)
         print(f"[SKLEARN] k={i}, iteracje={kmeans.n_iter_}, WCSS={wcss_sklearn:.4f}")
-
-        etykiety = kmeans.labels_
-        centroidy = kmeans.cluster_centers_
+        '''
 
     print("\n" + "=" * 80)
     print("GRUPOWANIE ZAKOŃCZONE")
