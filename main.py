@@ -1,5 +1,6 @@
 #algorytm k-srednich zaimplementowany w osobnym module
 import algorytmy
+from sklearn.cluster import KMeans
 
 #funkcja wczytująca dane z pliku, dane reprezentujące daną cechę kwiatów są zebrane w osobnych listach
 def wczytaj_dane_iris_plik(nazwa_pliku):
@@ -34,9 +35,25 @@ def main():
 
     print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k")
     for i in range(2, 11, 1):
+        '''
         klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, i)
         wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
-        print(f"DLA k={i}: \n-liczba iteracji: {iteracje}; \n-WCSS: {wcss:.4f};\n")
+        print(f"DLA k={i}: \n-liczba iteracji: {iteracje}; \n-WCSS: {wcss:.4f};\n")'''
+        kmeans = KMeans(n_clusters=i, random_state=0)
+        kmeans.fit(dane_znormalizowane)
+
+        etykiety = kmeans.labels_
+        centroidy_sklearn = kmeans.cluster_centers_
+
+        klasy_sklearn = [[] for _ in range(i)]
+        for wektor, ety in zip(dane_znormalizowane, etykiety):
+            klasy_sklearn[ety].append(wektor)
+
+        wcss_sklearn = algorytmy.oblicz_WCSS(klasy_sklearn, centroidy_sklearn)
+        print(f"[SKLEARN] k={i}, iteracje={kmeans.n_iter_}, WCSS={wcss_sklearn:.4f}")
+
+        etykiety = kmeans.labels_
+        centroidy = kmeans.cluster_centers_
 
     print("\n" + "=" * 80)
     print("GRUPOWANIE ZAKOŃCZONE")

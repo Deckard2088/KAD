@@ -50,8 +50,8 @@ def oblicz_WCSS(klastry, centroidy):
     x = len(centroidy)
     suma = 0
     for i in range(x):
-        for klaster in klastry[i]:
-            d = odleglosc_miedzy_wektorami(centroidy[i], klaster)
+        for punkt in klastry[i]:
+            d = odleglosc_miedzy_wektorami(centroidy[i], punkt)
             suma += d**2
     return suma
 
