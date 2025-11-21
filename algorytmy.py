@@ -1,6 +1,9 @@
 import random
 from math import sqrt
 
+from numpy.ma.core import minimum
+
+
 #Funkcja do obliczania odległości między wektorami; jako argumenty przyjmuje dwa wektory;
 #To w ilowymiarowej przestrzeni znajdują się owe wektory uzależnione jest od pierwszego wektora
 #algorytm ten oblicza odległość Euklidesową
@@ -22,18 +25,25 @@ def srednia_punkow(klaster):
     return srednia_punkow
 
 #funkcja, która przeprowadza normalizację danych
-def normalizacja(dane):
-    klucze = dane.keys()
-    wynik = {}
-    for k in klucze:
-        minimum = min(dane[k])
-        maksimum = max(dane[k])
-        #każda dana zostaje odpowiednio przeskalowana
-        wynik[k] = [(x - minimum) / (maksimum - minimum) for x in dane[k]]
-    return wynik
+def normalizacja(wektory):
+    liczbaCech = len(wektory[0])
+    # Tworzymy kopię, aby nie modyfikować danych wejściowych
+    wynik = [list(w) for w in wektory]
 
-def denomalizacja(dane):
-    return
+    for k in range(liczbaCech):
+        daneCechy = [w[k] for w in wektory]
+        minimum = min(daneCechy)
+        maksimum = max(daneCechy)
+
+        #zabezpieczenie na wypadek gdyby dane były jednolite
+        if maksimum == minimum:
+            for w in wynik:
+                w[k] = 0.5
+        else:
+            # każda dana zostaje odpowiednio przeskalowana
+            for w in wynik:
+                w[k] = (w[k] - minimum) / (maksimum - minimum)
+    return wynik
 
 #funkcja obliczająca WCSS
 def oblicz_WCSS(klastry, centroidy):
@@ -46,13 +56,9 @@ def oblicz_WCSS(klastry, centroidy):
     return suma
 
 #implementacja algorytmu k-średnich
-def k_srednie(dane, liczba_klastrow):
+def k_srednie(irysy, liczba_klastrow):
     #Zebrane dane dotyczące pojedynczego irysu przekształcamy w wektor
     #tworzymy listę kluczy ze słownika dane, a zatem kluczami są nazwy cech irysów
-    klucze = list(dane.keys())
-    #tworzymy liste irysy, złożoną z krotek utworzonych w wyniku użycia zipa
-    #zip łączy elementy z kilku iterowalnych obiektów w krotki element-po-elemencie.
-    irysy = list(zip(*(dane[i] for i in klucze)))
     #deklarujemy wszystkie klastry
     klastry = [[] for i in range(liczba_klastrow)]
 

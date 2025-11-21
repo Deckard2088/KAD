@@ -3,10 +3,8 @@ import algorytmy
 
 #funkcja wczytująca dane z pliku, dane reprezentujące daną cechę kwiatów są zebrane w osobnych listach
 def wczytaj_dane_iris_plik(nazwa_pliku):
-    nazwy_cech = ['Długość działki kielicha', 'Szerokość działki kielicha',
-                  'Długość płatka', 'Szerokość płatka']
     #Przygotowanie struktur na dane, tworzymy słownik z listami - dla każdej cechy osobna lista
-    wszystkie_dane = {nazwa: [] for nazwa in nazwy_cech}
+    wszystkie_dane = []
     #otwieramy wskazany nazwą plik w trybie read, po wyjściu z bloku with plik się zamyka automatycznie
     with open(nazwa_pliku, "r") as f:
         #odczytujemy plik linia po linii
@@ -17,10 +15,9 @@ def wczytaj_dane_iris_plik(nazwa_pliku):
             #tworzymy tablicę floatów 'wartości' w której znajdują się dane z pojedynczej linii
             #dane te powstały na skutek podziału tej linijki (separatorem jest tutaj przecinek
             wartosci = [float(x) for x in linia.strip().split(",")]
-            for i, nazwa_cechy in enumerate(nazwy_cech):
-                #do odpowiedniej listy dodajemy odpowiednie dane
-                wszystkie_dane[nazwa_cechy].append(wartosci[i])
-    return wszystkie_dane, nazwy_cech
+            wszystkie_dane.append(wartosci)
+    #Na koniec otrzymujemy tablicę zawierającą waktory, gdzie pojedyczny wektor zawiera dane jednego irysu
+    return wszystkie_dane
 
 #zrób drugą wersję wczytywania danych zwracając po prostu wektory
 def rysuj_wykresy(dane, nazwy_cech):
@@ -32,7 +29,7 @@ def main():
     print("na 5 impelemntacja")
     print("=" * 80)
 
-    dane, nazwy_cech = wczytaj_dane_iris_plik("data2.csv")
+    dane = wczytaj_dane_iris_plik("data2.csv")
     dane_znormalizowane = algorytmy.normalizacja(dane)
 
     print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k")
