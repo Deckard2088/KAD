@@ -2,6 +2,9 @@
 import algorytmy
 from sklearn.cluster import KMeans
 
+import wykresy
+
+
 #funkcja wczytująca dane z pliku, dane reprezentujące daną cechę kwiatów są zebrane w osobnych listach
 def wczytaj_dane_iris_plik(nazwa_pliku):
     #Przygotowanie struktur na dane, tworzymy słownik z listami - dla każdej cechy osobna lista
@@ -33,6 +36,13 @@ def main():
     dane = wczytaj_dane_iris_plik("data2.csv")
     dane_znormalizowane = algorytmy.normalizacja(dane)
 
+    klastryDoWykresow, centroidyDoWykresow, iteracjeWyk = algorytmy.k_srednie(dane_znormalizowane, 3)
+    wykresy.rysujWykresyZGrupowaniem(algorytmy.mapujNaOryginalne(dane, klastryDoWykresow), centroidyDoWykresow)
+    print("Rysuję wykresy...")
+
+    dane = wczytaj_dane_iris_plik("data2.csv")
+    dane_znormalizowane = algorytmy.normalizacja(dane)
+    print("=" * 80)
     print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k\n")
     print(f"|{'Liczba klastrów k':>16} | {'Liczba iteracji':>16} | {'WCSS':>8} |")
     print("|"+"-" * 18 + "|" + "-"*18 + "|" + "-"*10 + "|")

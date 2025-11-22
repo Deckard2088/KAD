@@ -22,11 +22,11 @@ def rysujWykresyZGrupowaniem(klastry, centroidy):
         (2, 3)
     ]
     kolory = [
-        '#FF0000'
-        '#00FF00'
-        '#0000FF'
-        '#FFFF00'
-        '#00FFFF'
+        '#FF0000',
+        '#00FF00',
+        '#0000FF',
+        '#FFFF00',
+        '#00FFFF',
         '#FF00FF'
     ]
     #przechodzimy po każdej parze cech (dla każdej pary osobny wykres)
@@ -34,15 +34,22 @@ def rysujWykresyZGrupowaniem(klastry, centroidy):
         fig, ax = plt.subplots(figsize=(10, 7))
         fig.suptitle('Współzależności pomiędzy cechami irysów', fontsize=16, fontweight='bold')
         #przechodzimy po każdym klastrze (dla każdego będzie inny kolor)
-        for klaster in klastry:
-            x = [punkt[i] for punkt in klaster]
-            y = [punkt[j] for punkt in klaster]
+        for k in range(len(klastry)):
+            x = [punkt[i] for punkt in klastry[k]]
+            y = [punkt[j] for punkt in klastry[k]]
             nazwa_cechy_x = pary_cech[i]
             nazwa_cechy_y = pary_cech[j]
             print(f"CECHY: {nazwa_cechy_x}, {nazwa_cechy_y}")
             print("Generowanie wykresu...")
-            ax.scatter(x, y, alpha=0.6, s=30, color=kolory[0], edgecolor='black', linewidth=0.5)
-
+            ax.scatter(x, y, alpha=0.6, s=30, color=kolory[k], edgecolor='black', linewidth=0.5)
+            #centroid = centroidy[k]
+            #ax.scatter(centroid[i], centroid[j], marker='X', alpha=0.1, s=30, color=kolory[k], edgecolor='black', linewidth=0.5)
+            ax.grid(alpha=0.3)
+            ax.legend(fontsize=8)
+        plt.tight_layout()
+        plt.savefig(f'wykres{i}_{j}.png', dpi=300, bbox_inches='tight')
+        print(f"\nZapisano: wykres{i}_{j}.png")
+        plt.show()
             
 
     plt.show()

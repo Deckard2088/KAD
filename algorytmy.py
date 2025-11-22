@@ -62,7 +62,9 @@ def mapujNaOryginalne(wektory, klastry):
                 klaster[k] = wektory[0][k]
         else:
             for klaster in klastryZOryginalnymiDanymi:
-                klaster[k] = klaster[k]*(maksimum - minimum) + minimum
+                for punkt in klaster:
+                    #klaster[k] = klaster[k]*(maksimum - minimum) + minimum
+                    punkt[k] = punkt[k]*(maksimum-minimum) + minimum
     return klastryZOryginalnymiDanymi
 
 #funkcja obliczająca WCSS
