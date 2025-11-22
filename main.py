@@ -33,21 +33,26 @@ def main():
     dane = wczytaj_dane_iris_plik("data2.csv")
     dane_znormalizowane = algorytmy.normalizacja(dane)
 
-    print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k")
-    for i in range(2, 11, 1):
+    print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k\n")
+    print(f"|{'Liczba klastrów k':>16} | {'Liczba iteracji':>16} | {'WCSS':>8} |")
+    print("|"+"-" * 18 + "|" + "-"*18 + "|" + "-"*10 + "|")
+    minWcss = 0
+    for k in range(2, 11, 1):
         #powtarzamy sobie algorytm kilka razy żeby uzyskać jak najmniejsze WCSS
-        klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, i)
+        klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, k)
         wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
         minWcss = wcss
         finalIteracje = iteracje
         for j in range(10):
-            klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, i)
+            klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, k)
             wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
             if minWcss > wcss:
                 minWcss = wcss
                 finalIteracje = iteracje
 
-        print(f"DLA k={i}: \n-liczba iteracji: {finalIteracje}; \n-WCSS: {minWcss:.4f};\n")
+        print(f"| {k:>16} | {finalIteracje:>16} | {minWcss:>8.4f} |")
+        print("|"+"-" * 18 + "|" + "-"*18 + "|" + "-"*10 + "|")
+        #print(f"DLA k={i}: \n-liczba iteracji: {finalIteracje}; \n-WCSS: {minWcss:.4f};\n")
 
         '''
         kmeans = KMeans(n_clusters=i, random_state=0)

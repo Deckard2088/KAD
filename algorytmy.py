@@ -45,6 +45,26 @@ def normalizacja(wektory):
                 w[k] = (w[k] - minimum) / (maksimum - minimum)
     return wynik
 
+#funkcja pomocnicza do zamiany znormalizowanych danych w klastrach z powrotem na dane oryginalne
+#potrzebna przy tworzeniu wykresów
+def mapujNaOryginalne(wektory, klastry):
+    liczbaCech = len(wektory[0])
+    #tworzymy kopie klastrów
+    klastryZOryginalnymiDanymi = [list(k) for k in klastry]
+
+    for k in range(liczbaCech):
+        daneCechy = [w[k] for w in wektory]
+        minimum = min(daneCechy)
+        maksimum = max(daneCechy)
+
+        if maksimum == minimum:
+            for klaster in klastryZOryginalnymiDanymi:
+                klaster[k] = wektory[0][k]
+        else:
+            for klaster in klastryZOryginalnymiDanymi:
+                klaster[k] = klaster[k]*(maksimum - minimum) + minimum
+    return klastryZOryginalnymiDanymi
+
 #funkcja obliczająca WCSS
 def oblicz_WCSS(klastry, centroidy):
     x = len(centroidy)
@@ -57,8 +77,6 @@ def oblicz_WCSS(klastry, centroidy):
 
 #implementacja algorytmu k-średnich
 def k_srednie(irysy, liczba_klastrow):
-    #Zebrane dane dotyczące pojedynczego irysu przekształcamy w wektor
-    #tworzymy listę kluczy ze słownika dane, a zatem kluczami są nazwy cech irysów
     #deklarujemy wszystkie klastry
     klastry = [[] for i in range(liczba_klastrow)]
 
