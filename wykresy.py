@@ -26,7 +26,7 @@ def rysujWykresyZGrupowaniem(klastry, centroidy):
     #przechodzimy po każdej parze cech (dla każdej pary osobny wykres)
     for i, j in indeksy_par_cech:
         fig, ax = plt.subplots(figsize=(10, 7))
-        fig.suptitle('Współzależności pomiędzy cechami irysów', fontsize=16, fontweight='bold')
+        #fig.suptitle('Współzależności pomiędzy cechami irysów', fontsize=16, fontweight='bold')
         #przechodzimy po każdym klastrze (dla każdego będzie inny kolor)
         for k in range(len(klastry)):
             x = [punkt[i] for punkt in klastry[k]]
