@@ -1,17 +1,11 @@
 import matplotlib.pyplot as plt
 
-def rysujKlastry(klastry, cecha_x, cecha_y):
-    return
-
 def rysujWykresyZGrupowaniem(klastry, centroidy):
-    #w takiej kolejności występują dane w wektorach
-    pary_cech = [
-        ('Długość działki kielicha', 'Szerokość działki kielicha'),
-        ('Długość działki kielicha', 'Długość płatka'),
-        ('Długość działki kielicha', 'Szerokość płatka'),
-        ('Szerokość działki kielicha', 'Długość płatka'),
-        ('Szerokość działki kielicha', 'Szerokość płatka'),
-        ('Długość płatka', 'Szerokość płatka')
+    nazwy_cech = [
+        'Długość działki kielicha',
+        'Szerokość działki kielicha',
+        'Długość płatka',
+        'Szerokość płatka'
     ]
     indeksy_par_cech = [
         (0, 1),
@@ -37,19 +31,57 @@ def rysujWykresyZGrupowaniem(klastry, centroidy):
         for k in range(len(klastry)):
             x = [punkt[i] for punkt in klastry[k]]
             y = [punkt[j] for punkt in klastry[k]]
-            nazwa_cechy_x = pary_cech[i]
-            nazwa_cechy_y = pary_cech[j]
-            print(f"CECHY: {nazwa_cechy_x}, {nazwa_cechy_y}")
-            print("Generowanie wykresu...")
-            ax.scatter(x, y, alpha=0.6, s=30, color=kolory[k], edgecolor='black', linewidth=0.5)
-            #centroid = centroidy[k]
-            #ax.scatter(centroid[i], centroid[j], marker='X', alpha=0.1, s=30, color=kolory[k], edgecolor='black', linewidth=0.5)
-            ax.grid(alpha=0.3)
-            ax.legend(fontsize=8)
+
+            ax.set_xlabel(f'{nazwy_cech[i]} (cm)', fontsize=9)
+            ax.set_ylabel(f'{nazwy_cech[j]} (cm)', fontsize=9)
+
+            ax.scatter(
+                    x, y,
+                    #Przezroczystość punktu
+                    alpha=0.6,
+                    s=30,
+                    color=kolory[k],
+                    edgecolor='black',
+                    linewidth=0.5)
+
+            centroid = centroidy[k]
+            ax.scatter(
+                #współrzędne centroidu w przestrzni 2D
+                centroid[i], centroid[j],
+                #Rysuj centroid jako romb
+                marker='D',
+                s=200,
+                #kolor taki sam jak kolor klastra
+                color=kolory[k],
+                #kolor konturu
+                edgecolor='black',
+                linewidth=1,
+                label=f'Centroid {k + 1}'
+            )
+        ax.grid(alpha=0.3)
+        ax.legend(fontsize=8)
+        print("Generowanie wykresu...")
         plt.tight_layout()
         plt.savefig(f'wykres{i}_{j}.png', dpi=300, bbox_inches='tight')
         print(f"\nZapisano: wykres{i}_{j}.png")
         plt.show()
             
 
+    plt.show()
+
+def rysujWykresWCSS(zebraneWCSS):
+    liczbaK = [x for x in range(2, 2 + len(zebraneWCSS))]
+
+    fig, ax = plt.subplots(figsize=(10, 7))
+    fig.suptitle('Zależność WCSS od liczby klastrów', fontsize=16, fontweight='bold')
+    ax.set_xlabel("Liczba klastrów k")
+    ax.set_ylabel("WCSS")
+    ax.scatter(liczbaK, zebraneWCSS, color='blue', s=50, label='WCSS')
+    ax.plot(liczbaK, zebraneWCSS, color='blue', linestyle='--')
+    ax.grid(True, linestyle='--', alpha=0.5)
+    ax.legend()
+    print("Generowanie wykresu...")
+    plt.tight_layout()
+    plt.savefig("ZaleznoscKlastryWCSS.png", dpi=300, bbox_inches='tight')
+    print("ZaleznoscKlastryWCSS.png")
     plt.show()

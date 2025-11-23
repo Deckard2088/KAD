@@ -23,9 +23,6 @@ def wczytaj_dane_iris_plik(nazwa_pliku):
     #Na koniec otrzymujemy tablicę zawierającą waktory, gdzie pojedyczny wektor zawiera dane jednego irysu
     return wszystkie_dane
 
-#zrób drugą wersję wczytywania danych zwracając po prostu wektory
-def rysuj_wykresy(dane, nazwy_cech):
-    return
 
 def main():
     print("\n" + "=" * 80)
@@ -36,17 +33,20 @@ def main():
     dane = wczytaj_dane_iris_plik("data2.csv")
     dane_znormalizowane = algorytmy.normalizacja(dane)
 
-    klastryDoWykresow, centroidyDoWykresow, iteracjeWyk = algorytmy.k_srednie(dane_znormalizowane, 3)
-    wykresy.rysujWykresyZGrupowaniem(algorytmy.mapujNaOryginalne(dane, klastryDoWykresow), centroidyDoWykresow)
-    print("Rysuję wykresy...")
+    klastryZnorm, centroidyZnorm, iteracjeZnorm = algorytmy.k_srednie(dane_znormalizowane, 3)
+    klastryDoWykresu, centroidyDoWykresu = algorytmy.mapujNaOryginalne(dane, klastryZnorm, centroidyZnorm)
+    #wykresy.rysujWykresyZGrupowaniem(klastryDoWykresu, centroidyDoWykresu)
 
     dane = wczytaj_dane_iris_plik("data2.csv")
     dane_znormalizowane = algorytmy.normalizacja(dane)
+
+
     print("=" * 80)
     print("\nGRUPOWANIE DLA RÓŻNEJ LICZBY KLASTRÓW k\n")
     print(f"|{'Liczba klastrów k':>16} | {'Liczba iteracji':>16} | {'WCSS':>8} |")
     print("|"+"-" * 18 + "|" + "-"*18 + "|" + "-"*10 + "|")
     minWcss = 0
+    tabelaWCSS = []
     for k in range(2, 11, 1):
         #powtarzamy sobie algorytm kilka razy żeby uzyskać jak najmniejsze WCSS
         klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, k)
@@ -59,26 +59,12 @@ def main():
             if minWcss > wcss:
                 minWcss = wcss
                 finalIteracje = iteracje
+        tabelaWCSS.append(minWcss)
 
         print(f"| {k:>16} | {finalIteracje:>16} | {minWcss:>8.4f} |")
         print("|"+"-" * 18 + "|" + "-"*18 + "|" + "-"*10 + "|")
-        #print(f"DLA k={i}: \n-liczba iteracji: {finalIteracje}; \n-WCSS: {minWcss:.4f};\n")
 
-        '''
-        kmeans = KMeans(n_clusters=i, random_state=0)
-        kmeans.fit(dane_znormalizowane)
-
-        etykiety = kmeans.labels_
-        centroidy_sklearn = kmeans.cluster_centers_
-
-        klasy_sklearn = [[] for _ in range(i)]
-        for wektor, ety in zip(dane_znormalizowane, etykiety):
-            klasy_sklearn[ety].append(wektor)
-
-        wcss_sklearn = algorytmy.oblicz_WCSS(klasy_sklearn, centroidy_sklearn)
-        print(f"[SKLEARN] k={i}, iteracje={kmeans.n_iter_}, WCSS={wcss_sklearn:.4f}")
-        '''
-
+    wykresy.rysujWykresWCSS(tabelaWCSS)
     print("\n" + "=" * 80)
     print("GRUPOWANIE ZAKOŃCZONE")
     print("=" * 80)

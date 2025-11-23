@@ -1,4 +1,5 @@
 import random
+import copy
 from math import sqrt
 
 from numpy.ma.core import minimum
@@ -47,10 +48,11 @@ def normalizacja(wektory):
 
 #funkcja pomocnicza do zamiany znormalizowanych danych w klastrach z powrotem na dane oryginalne
 #potrzebna przy tworzeniu wykresów
-def mapujNaOryginalne(wektory, klastry):
+'''
+def mapujNaOryginalne(wektory, klastry, centroidy):
     liczbaCech = len(wektory[0])
     #tworzymy kopie klastrów
-    klastryZOryginalnymiDanymi = [list(k) for k in klastry]
+    klastryOut = [list(k) for k in klastry]
 
     for k in range(liczbaCech):
         daneCechy = [w[k] for w in wektory]
@@ -65,7 +67,37 @@ def mapujNaOryginalne(wektory, klastry):
                 for punkt in klaster:
                     #klaster[k] = klaster[k]*(maksimum - minimum) + minimum
                     punkt[k] = punkt[k]*(maksimum-minimum) + minimum
-    return klastryZOryginalnymiDanymi
+    return klastryOut, centroidyOut'''
+def mapujNaOryginalne(wektory, klastry, centroidy):
+    # kopie głębokie
+    klastry_out = copy.deepcopy(klastry)
+    centroidy_out = copy.deepcopy(centroidy)
+
+    liczbaCech = len(wektory[0])
+
+    for k in range(liczbaCech):
+        wartosci = [w[k] for w in wektory]
+        min_k = min(wartosci)
+        max_k = max(wartosci)
+
+        if max_k == min_k:
+            # jeśli cecha jest stała
+            for klaster in klastry_out:
+                for punkt in klaster:
+                    punkt[k] = min_k
+            for c in centroidy_out:
+                c[k] = min_k
+        else:
+            zakres = max_k - min_k
+            # denormalizacja punktów
+            for klaster in klastry_out:
+                for punkt in klaster:
+                    punkt[k] = punkt[k] * zakres + min_k
+            # denormalizacja centroidów
+            for c in centroidy_out:
+                c[k] = c[k] * zakres + min_k
+
+    return klastry_out, centroidy_out
 
 #funkcja obliczająca WCSS
 def oblicz_WCSS(klastry, centroidy):
