@@ -1,7 +1,6 @@
 #algorytm k-srednich zaimplementowany w osobnym module
 import algorytmy
-from sklearn.cluster import KMeans
-
+#algorytmy do wykresów zaimplementowane w osobnym module
 import wykresy
 
 
@@ -76,16 +75,6 @@ def main():
     tabelaWCSS = []
     for k in range(2, 11, 1):
         #powtarzamy sobie algorytm kilka razy żeby uzyskać jak najmniejsze WCSS
-        '''klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, k)
-        wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
-        minWcss = wcss
-        finalIteracje = iteracje
-        for j in range(10):
-            klastry, centroidy, iteracje = algorytmy.k_srednie(dane_znormalizowane, k)
-            wcss = algorytmy.oblicz_WCSS(klastry, centroidy)
-            if minWcss > wcss:
-                minWcss = wcss
-                finalIteracje = iteracje'''
         najlepsze_klastry, najlepsze_centroidy, najlepsze_iteracje, minWcss = znajdz_najlepsze_grupowanie(
             dane_znormalizowane, k
         )

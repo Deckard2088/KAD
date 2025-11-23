@@ -2,9 +2,6 @@ import random
 import copy
 from math import sqrt
 
-from numpy.ma.core import minimum
-
-
 #Funkcja do obliczania odległości między wektorami; jako argumenty przyjmuje dwa wektory;
 #To w ilowymiarowej przestrzeni znajdują się owe wektory uzależnione jest od pierwszego wektora
 #algorytm ten oblicza odległość Euklidesową
@@ -48,26 +45,6 @@ def normalizacja(wektory):
 
 #funkcja pomocnicza do zamiany znormalizowanych danych w klastrach z powrotem na dane oryginalne
 #potrzebna przy tworzeniu wykresów
-'''
-def mapujNaOryginalne(wektory, klastry, centroidy):
-    liczbaCech = len(wektory[0])
-    #tworzymy kopie klastrów
-    klastryOut = [list(k) for k in klastry]
-
-    for k in range(liczbaCech):
-        daneCechy = [w[k] for w in wektory]
-        minimum = min(daneCechy)
-        maksimum = max(daneCechy)
-
-        if maksimum == minimum:
-            for klaster in klastryZOryginalnymiDanymi:
-                klaster[k] = wektory[0][k]
-        else:
-            for klaster in klastryZOryginalnymiDanymi:
-                for punkt in klaster:
-                    #klaster[k] = klaster[k]*(maksimum - minimum) + minimum
-                    punkt[k] = punkt[k]*(maksimum-minimum) + minimum
-    return klastryOut, centroidyOut'''
 def mapujNaOryginalne(wektory, klastry, centroidy):
     # kopie głębokie
     klastry_out = copy.deepcopy(klastry)
